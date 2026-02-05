@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FinDash • 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script defer src="./assets/app.js"></script>
+</head>
+<body>
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-grid"></div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">B</div>
+        <div>
+          <div class="brand-title">FinDash</div>
+          <div class="brand-sub">Ano <span id="yearLabel">2026</span> • Auto atualizado</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-item active" href="./index.html">
+          <span>📊</span><span>Dashboard</span>
+        </a>
+        <a class="nav-item" href="./detalhe.html">
+          <span>🧾</span><span>Detalhe mensal</span>
+        </a>
+      </nav>
+
+      <div class="card subtle">
+        <div class="row between">
+          <div class="muted">Fonte</div>
+          <div class="pill">data/data.json</div>
+        </div>
+        <div class="muted" style="margin-top:10px">
+          Atualiza automaticamente quando o Power Automate sobrescreve <b>data/data.json</b> no repositório.
+        </div>
+        <div class="row" style="margin-top:12px; gap:10px">
+          <button class="btn" id="refreshBtn">Atualizar agora</button>
+          <button class="btn ghost" id="themeBtn" title="Alternar tema">🌗</button>
+        </div>
+      </div>
+
+      <div class="foot muted">
+        Dica: use Ctrl+F5 se o navegador estiver usando cache antigo.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <div class="muted">Resumo (Tabela1) + cartões de bancos (Tabela2 e Tabela3)</div>
+        </div>
+
+        <div class="controls">
+          <div class="select">
+            <label for="monthSelect">Mês</label>
+            <select id="monthSelect"></select>
+          </div>
+          <div class="chips" aria-label="Filtros">
+            <button class="chip active" data-metric="entrada">Entrada</button>
+            <button class="chip active" data-metric="saida">Saída</button>
+            <button class="chip active" data-metric="liquido">Líquido</button>
+            <button class="chip active" data-metric="diff_m1">Diferença M-1</button>
+            <button class="chip active" data-metric="crescimento">Crescimento</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="grid kpis">
+        <div class="kpi">
+          <div class="kpi-title">Entrada</div>
+          <div class="kpi-value" id="kpiEntrada">—</div>
+          <div class="kpi-sub muted" id="kpiEntradaSub">no mês selecionado</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-title">Saída</div>
+          <div class="kpi-value" id="kpiSaida">—</div>
+          <div class="kpi-sub muted" id="kpiSaidaSub">no mês selecionado</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-title">Líquido</div>
+          <div class="kpi-value" id="kpiLiquido">—</div>
+          <div class="kpi-sub muted" id="kpiLiquidoSub">Entrada − Saída</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-title">Diferença M-1</div>
+          <div class="kpi-value" id="kpiDiff">—</div>
+          <div class="kpi-sub muted">variação vs mês anterior</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-title">Crescimento</div>
+          <div class="kpi-value" id="kpiCresc">—</div>
+          <div class="kpi-sub muted">percentual (Tabela1)</div>
+        </div>
+      </section>
+
+      <section class="grid two">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Evolução mensal</div>
+              <div class="muted">Entrada, Saída e Líquido (Fevereiro → Dezembro)</div>
+            </div>
+            <div class="pill" id="updatedAtPill">—</div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Top gastos por categoria</div>
+              <div class="muted">saídas do mês selecionado (Detalhe mensal)</div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="topCatsChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid two">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Nubank</div>
+              <div class="muted">Card (Tabela2) • Saída por mês (sem filtro)</div>
+            </div>
+            <div class="big-number" id="nubankTotal">—</div>
+          </div>
+          <div class="chart-wrap small">
+            <canvas id="nubankChart"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Santander</div>
+              <div class="muted">Card (Tabela3) • Saída por mês (sem filtro)</div>
+            </div>
+            <div class="big-number" id="santanderTotal">—</div>
+          </div>
+          <div class="chart-wrap small">
+            <canvas id="santanderChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Tabela1 (resumo)</div>
+            <div class="muted">Linhas por mês • use os chips acima para esconder/mostrar colunas</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table" id="summaryTable">
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th data-col="entrada">Entrada</th>
+                <th data-col="saida">Saída</th>
+                <th data-col="liquido">Líquido</th>
+                <th data-col="diff_m1">Diferença M-1</th>
+                <th data-col="crescimento">Crescimento</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

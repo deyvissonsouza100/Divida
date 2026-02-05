@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FinDash • Detalhe mensal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script defer src="./assets/app.js"></script>
+</head>
+<body>
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-grid"></div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">B</div>
+        <div>
+          <div class="brand-title">FinDash</div>
+          <div class="brand-sub">Ano <span id="yearLabel">2026</span> • Auto atualizado</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-item" href="./index.html">
+          <span>📊</span><span>Dashboard</span>
+        </a>
+        <a class="nav-item active" href="./detalhe.html">
+          <span>🧾</span><span>Detalhe mensal</span>
+        </a>
+      </nav>
+
+      <div class="card subtle">
+        <div class="row between">
+          <div class="muted">Filtro</div>
+          <div class="pill">Mês (2026)</div>
+        </div>
+        <div class="select" style="margin-top:12px">
+          <label for="monthSelectDetail">Mês</label>
+          <select id="monthSelectDetail"></select>
+        </div>
+        <div class="row" style="margin-top:12px; gap:10px">
+          <button class="btn" id="refreshBtn">Atualizar agora</button>
+          <button class="btn ghost" id="themeBtn" title="Alternar tema">🌗</button>
+        </div>
+      </div>
+
+      <div class="foot muted">
+        Detalhe vindo da Tabela4 (blocos por mês).
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Detalhe mensal</h1>
+          <div class="muted">Listagem de descrições e valores (Entrada e Saída) • Fevereiro → Dezembro</div>
+        </div>
+        <div class="pill" id="updatedAtPill">—</div>
+      </header>
+
+      <section class="grid two">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Composição das saídas</div>
+              <div class="muted">Top categorias (saídas do mês)</div>
+            </div>
+            <div class="big-number" id="detailSaidaTotal">—</div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="detailCatsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Entrada vs Saída</div>
+              <div class="muted">Comparação do mês selecionado</div>
+            </div>
+            <div class="big-number" id="detailLiquido">—</div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="detailBarChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid two">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Entradas</div>
+              <div class="muted">descrição + valor</div>
+            </div>
+            <div class="pill" id="detailEntradaTotal">—</div>
+          </div>
+          <div class="table-wrap">
+            <table class="table" id="entradaTable">
+              <thead><tr><th>Descrição</th><th class="right">Valor</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Saídas</div>
+              <div class="muted">descrição + valor</div>
+            </div>
+            <div class="pill">Ordenado por valor</div>
+          </div>
+          <div class="table-wrap">
+            <table class="table" id="saidaTable">
+              <thead><tr><th>Descrição</th><th class="right">Valor</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
