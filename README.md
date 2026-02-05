@@ -1,28 +1,28 @@
-# FinDash (GitHub Pages) • 2026
+# Arquivos mínimos para atualizar automaticamente via OneDrive -> GitHub
 
-Dashboard financeiro moderno, com duas páginas:
+## O que isso faz
+- Um GitHub Action roda a cada 30 minutos
+- Baixa sua planilha XLSX do OneDrive (URL de download direto)
+- Converte para `data/data.json`
+- Faz commit e push no repositório
 
-- **Dashboard**: usa a **Tabela1** (Entrada/Saída/Líquido/Diferença M-1/Crescimento) + cartões **Nubank** (Tabela2) e **Santander** (Tabela3)
-- **Detalhe mensal**: usa os blocos por mês (Tabela4) para listar **Entradas** e **Saídas** com descrições e valores
+## Passo 1 — Adicionar estes arquivos no seu repo
+- `.github/workflows/sync-onedrive.yml`
+- `scripts/sync_onedrive_to_datajson.mjs`
+- `package.json`
 
-## Publicar no GitHub Pages
+## Passo 2 — Configurar o Secret com a URL do XLSX
+No GitHub:
+Settings → Secrets and variables → Actions → **New repository secret**
+- Name: `ONEDRIVE_XLSX_URL`
+- Value: **URL de DOWNLOAD direto do XLSX**
 
-1. Suba todos os arquivos deste ZIP no seu repositório
-2. Settings → **Pages**
-   - Source: `Deploy from a branch`
-   - Branch: `main` / folder `/ (root)`
-3. Acesse a URL do GitHub Pages
+⚠️ Seu link atual é do tipo `.../doc.aspx?...` (visualização).
+Ele normalmente NÃO serve para automação, porque retorna HTML.
+Você precisa de um link que devolva o arquivo `.xlsx` (download), sem login.
 
-## Atualização automática (Power Automate → GitHub)
+## Passo 3 — Rodar o workflow
+Aba Actions → “Sync OneDrive XLSX -> data/data.json” → Run workflow
 
-O site NÃO lê o XLSX diretamente. Ele lê este arquivo:
-
-- `data/data.json`
-
-O Power Automate deve sobrescrever esse arquivo sempre que sua planilha do OneDrive mudar.
-
-Veja o guia em `power-automate.md`.
-
-## Formato esperado do data.json
-
-Veja um exemplo real em `data/data.json` (gerado a partir da sua planilha).
+## Frequência
+No arquivo YAML você pode ajustar o `cron`.

@@ -1,0 +1,8 @@
+{
+  "name": "fin-dashboard-sync",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
